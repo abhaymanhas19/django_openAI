@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block content %}
+{%load static %}
+<!-- hero start -->
+<div class="container-fluid pt-5 bg-primary hero-header">
+    <div class="container pt-5">
+        <div class="row g-5 pt-5">
+            <div class="col-lg-6 align-self-center text-center text-lg-start mb-lg-5">
+                <h1 class="display-2 text-white mb-4 animated slideInRight">Welcome {{request.user}}</h1>
+            </div>
+            <div class="col-lg-6 align-self-end text-center text-lg-end">
+                <img class="img-fluid" src="{% static 'img/hero-img.png' %}" alt="" style="max-height: 300px;">
+            </div>
+        </div>
+    </div>
+</div> 
+<!-- Hero End --> 
+
+<div class="container Pt-5">
+    <a href="/get-form"><div class="btn btn-sm border rounded-pill text-black  fw-bold px-3 m-3 bg-warning">Try Ai.tech</div></a>
+</div>
+
+<p>
+    <a class="btn btn-sm border rounded-pill text-black fw-bold px-3 m-3 bg-warning" data-bs-toggle="collapse" href="#multiCollapseExample1" role="button" aria-expanded="True" hx-get='/view-list'hx-target="#list"  aria-controls="multiCollapseExample1">View Past Questions and Answers <i class="fa fa-caret-down"></i></a>
+</p>
+  <div class="row" id="list">
+    <div class="collapse multi-collapse" id="multiCollapseExample1">
+        <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th scope="col"></th>
+                <th scope="col">Date</th>
+                <th scope="col">Time</th>
+                <th scope="col">Question</th>
+                <th scope="col">Answer</th>
+              </tr>
+            </thead>
+            <tbody>
+                {% if form %}
+                 
+                {% else %}
+                <div class="text-danger fw-bold fs-6">No data found!</div>
+                {% endif %}
+             
+            </tbody>
+          </table>
+    
+
+    </div>
+    
+    
+  </div>
+
+{% endblock%}

@@ -1,0 +1,11 @@
+Django==4.2.1
+python-dotenv==1.0.0
+django-widget-tweaks==1.4.12
+django-multiupload==0.6.1
+pandas=2.0.2
+fitz==0.0.1.dev2
+pymupdf=1.22.3
+openai==0.27.7
+asyncio==3.4.3
+aiohttp==3.8.4
+tiktoken==0.4.0

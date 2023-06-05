@@ -1,0 +1,7 @@
+{% if files %}
+    {% for f in files %}
+        {{ f.file }}
+    {% endfor %}
+{% else %}
+    <h6>No files!</h6>
+{% endif %}

@@ -1,0 +1,20 @@
+<script src="https://unpkg.com/htmx.org@1.9.2"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+ {%load static %}
+{% load widget_tweaks %} 
+
+<div id="choiceva">
+    <form method="post" hx-post="{% url 'processing' %}" hx-target="#processedform" novalidate>
+        {% csrf_token %}
+        <div class="form-group">
+            {% for f in forms %}
+            {{ f.label }} {{ f }} {{ f.errors|striptags }}<br>
+            {% endfor %}
+        </div>
+        <button type="submit">Submit</button>
+    </form>
+</div> 
+<div id="processedform">
+    
+</div>
+

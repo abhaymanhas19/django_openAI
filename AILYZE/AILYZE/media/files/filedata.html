@@ -1,0 +1,16 @@
+<script src="https://unpkg.com/htmx.org@1.9.2"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+ {%load static %}
+{% load widget_tweaks %}
+<div class="form-group">
+    <label for="{{ form.file.id_for_label }}" class="form-label"></label>
+   {% render_field form.upload_option %}
+</div>
+<div class="form-group">
+    <label for="{{ form.file.id_for_label }}" class="form-label"></label>
+   {% render_field form.file  hx-get="/get-choices" hx-target="#choice" %}
+   <span class="text-danger"> {{ form.file.errors|striptags }}</span>
+</div>
+<div id="choice">
+
+</div>

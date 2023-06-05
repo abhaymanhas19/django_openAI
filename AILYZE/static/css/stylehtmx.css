@@ -1,0 +1,10 @@
+.error{
+    color:red;
+    /* font-size:40px; */
+    /* transform:rotate(-45deg);  */
+    transition:all ease-in 1s
+}
+.success{
+    color:green;
+    transition: all ease-in 1s;
+  }

@@ -1,0 +1,18 @@
+<script src="https://unpkg.com/htmx.org@1.9.2"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+ {%load static %}
+{% load widget_tweaks %}
+<div id="choice">
+    {% for j in choices %}
+    {% csrf_token %}
+    <button type="submit" class="btn btn-sm rounded-pill text-black fw-bold px-3 m-3 btn-outline-info" hx-post="{% url 'query' %}"  hx-vals='{"choice": "{{ j }}" }'  hx-target="#choiceva">{{ j }} </button><br>
+   {% endfor %} 
+</div> 
+<div id="choiceva">
+
+</div>
+<script>
+    document.body.addEventListener('htmx:configRequest', (event) => {
+      event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
+    })
+  </script>
