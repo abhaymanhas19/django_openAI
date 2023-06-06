@@ -30,30 +30,10 @@
        {% render_field form.file  hx-get='/get-choices' hx-target='#choice' %}
        <span class="text-danger"> {{ form.file.errors|striptags }}</span>
     </div>
-    <input type="submit" value="Upload" >
-  </form>
+    <div id="choice">
 
+    </div>
+    <button type="submit"> Upload file </button>
+</form>
 
-
-
-  <!-- {% for file in files %}
-  <label>
-    <input type="checkbox" name="selected_files" value="{{ file.file.id }}">
-    <a href="" target="_blank">{{ file.file }}</a>
-
-  </label><br>
-{% endfor %} -->
-
-
-  <!-- {% if form.upload_option.value == 'previous' %}
-    
-{% endif %} -->
-<!-- 
-<div id="showfiles">
-    {% include 'allfiles.html' %}
-</div> -->
-
-<div id="choice">
-
-</div>
 {% endblock %}

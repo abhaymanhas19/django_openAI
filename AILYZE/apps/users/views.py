@@ -11,7 +11,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth import update_session_auth_hash
 from apps.users.enum import Anaylsis
 from django.views.generic.list import ListView
-from apps.users.utils import UploadFiles
+from apps.users.utils import FileHandler,SumarrizeClass
 
 
 
@@ -80,14 +80,17 @@ class ChangePassword(View):
 
 
 
-
-
-
+    
 
 class UploadFileChoice(View):
+
+    def handle_uploaded_file(f):  
+        with open('myapp/static/upload/'+f.name, 'wb+') as destination:  
+            for chunk in f.chunks():  
+                destination.write(chunk)  
+                
     def get(self, request):
         form = UplaodFileForm()
-        # files=Files.objects.all()
         context = {'form': form
                    }
         return render(request, "filedata.html", context)
@@ -98,12 +101,16 @@ class UploadFileChoice(View):
         if form.is_valid():
             obj = form.save()
             obj.email = user.email
-            obj.save()
-            file=request.FILES.get('file')
-            instance=UploadFiles(files=file)
-            data=instance.upload_documents(3,10000)
-            print("-----------------------------")
-            print(data)
+            # obj.save()
+            try: 
+                uploaded_file = request.FILES['file']
+                if not isinstance(uploaded_file, list):
+                    uploaded_file = [uploaded_file]
+                instance=FileHandler([i.file for i in uploaded_file])
+                instance.upload_documents(max_documents=50,max_words=10000)
+                # print(" succesfully", df)
+            except Exception as e:
+                print("This is is Exception as ", e)
             return redirect('/get-form')
         return render(request, "filedata.html", {'form': form
                    })
@@ -114,12 +121,12 @@ class UploadFileChoice(View):
   
 
 
-class ShowFiles(View):
-    def get(self, request,value):
-        print(value)
-        print(self.kwargs.get('upload_option'))
-        value = request.GET.get('value')
-        print(value)
+# class ShowFiles(View):
+#     def get(self, request,value):
+#         print(value)
+#         print(self.kwargs.get('upload_option'))
+#         value = request.GET.get('value')
+#         print(value)
 
 
 
@@ -145,11 +152,6 @@ class UserQuery(View):
         Anaylsis.Compare_viewpoints_across_documents.value:  lambda request: render(request,'chioceform.html',{'forms':CompareViewpoint()})
     }
 
-    # def get(self,request):
-    #     render_fun = self.a.get(choice)
-    #     if not render_fun:
-    #         return render(request,'<div>Invalid choice</div>',{'forms':SummerizeType()}),
-    #     return render_fun(request)
     def post(self, request):
         choice = request.POST.get('choice')
         data=request.session['choice']=choice
@@ -161,20 +163,34 @@ class UserQuery(View):
 
 
 class ProcessQuery(View):
-    a = {
-        Anaylsis.Summarize.value: lambda request: render(request,'chioceform.html',{'forms':SummerizeType()}),
-        Anaylsis.Ask_a_specific_question.value:  lambda request:render(request,'chioceform.html',{'forms':SPecificQuestion()}),
-        Anaylsis.Conduct_thematic_analysis.value: lambda request: render(request,'chioceform.html',{'forms':ThemeType()}),
-        Anaylsis.Identidy_which_document_contain_a_certain_viewpoint.value:  lambda request: render(request,'chioceform.html',{'forms':IdentifyViewpoint()}),
-        Anaylsis.Compare_viewpoints_across_documents.value:  lambda request: render(request,'chioceform.html',{'forms':CompareViewpoint()})
-    }
-
+    # a = {
+    #     Anaylsis.Summarize.value: lambda request: render(request,'chioceform.html',{'forms':SummerizeType()}),
+    #     Anaylsis.Ask_a_specific_question.value:  lambda request:render(request,'chioceform.html',{'forms':SPecificQuestion()}),
+    #     Anaylsis.Conduct_thematic_analysis.value: lambda request: render(request,'chioceform.html',{'forms':ThemeType()}),
+    #     Anaylsis.Identidy_which_document_contain_a_certain_viewpoint.value:  lambda request: render(request,'chioceform.html',{'forms':IdentifyViewpoint()}),
+    #     Anaylsis.Compare_viewpoints_across_documents.value:  lambda request: render(request,'chioceform.html',{'forms':CompareViewpoint()})
+    # }
     def post(self,request):
         choice=request.session.get('choice')
-        print("-------------------------------------",choice)
-        render_fun=self.a.get(choice)
-        return render_fun(request)
+        variables = {
+        "Summarize": ["summary", "instruction"],
+        "Ask_a_specific_question": ["question", "instruction", "keywords"],
+        "Conduct_thematic_analysis": ["theme_type", "instruction"],
+        "Identidy_which_document_contain_a_certain_viewpoint": ["instruction"],
+        "Compare_viewpoints_across_documents": ["instruction", "question"]
+    }    
+        if choice in variables:
+            print("-------------------------------------", choice)
+            values = [request.POST.get(var, '') for var in variables[choice]]
+            summary_value = values[variables[choice].index("summary")]
+            instruction_value = values[variables[choice].index("instruction")]
+            quetion = summary_value + instruction_value
+            answer = "good"
+            UserQuery.objects.create(question=quetion, answer=answer , user = self.request.user)
+            return HttpResponse("Done ")
+        return HttpResponse("Not Done ")
 
+    
 
 
     

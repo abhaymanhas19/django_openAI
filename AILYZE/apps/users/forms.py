@@ -32,19 +32,7 @@ class UplaodFileForm(forms.ModelForm):
 
 
     
-    # def clean_file(self):
-    #     file = self.cleaned_data.get('file')
-    #     existing_file = Files.objects.filter(file=file).first()
-    #     if existing_file:
-    #         return existing_file.file
 
-    #     return file
-
-
-    # def get_initial(self):
-    #     initial = super(UplaodFileForm, self).get_initial()
-    #     initial['email'] = self.request.user.email
-    #     return initial
 
 
 
@@ -68,7 +56,7 @@ class SummerizeType(forms.Form):
     ))
     
 class SPecificQuestion(forms.Form):
-    question=forms.CharField(error_messages={
+    question=forms.CharField(required=True,error_messages={
         'required': 'Please enter your question option.'},widget=forms.Textarea(
         attrs={'placeholder':'Enter your Question'}
     ))
@@ -91,13 +79,19 @@ class ThemeType(forms.Form):
     ))
 
 
+
+
 class IdentifyViewpoint(forms.Form):
     instruction=forms.CharField(widget=forms.Textarea(
         attrs={'placeholder':'Participants generally trust medical professionals about the flu and vaccine'}
     ))
 
+
+
+
+
 class CompareViewpoint(forms.Form):
-    question=forms.CharField(error_messages={
+    question=forms.CharField(required=True,error_messages={
         'required': 'Please enter your question option.'},widget=forms.Textarea(
         attrs={'placeholder':'Input your Question'}
     ))

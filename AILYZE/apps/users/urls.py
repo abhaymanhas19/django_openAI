@@ -13,7 +13,7 @@ urlpatterns = [
 
 
     path('get-form/',views.UploadFileChoice.as_view(),name='get-form'),
-    path('show-files/<str:value>',views.ShowFiles.as_view(), name="show-files"),
+    # path('show-files/<str:value>',views.ShowFiles.as_view(), name="show-files"),
 
     path('get-choices/',views.Getchoices.as_view(),name='get-choices'),
     path('query/',views.UserQuery.as_view(),name='query'),

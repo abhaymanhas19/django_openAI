@@ -56,8 +56,9 @@ class Files(models.Model):
 
 
 
+
 class UserQuery(models.Model):
-    file=models.ForeignKey(Files, verbose_name=_("files"), on_delete=models.CASCADE)
+    user=models.ForeignKey(User, verbose_name=_("user_query"), on_delete=models.CASCADE,null=True,blank=True)
     question=models.TextField(_("question"))
     answer=models.TextField(_("answer"))
     date=models.DateField(_("date"), auto_now_add=True)
